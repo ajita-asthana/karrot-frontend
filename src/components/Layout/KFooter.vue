@@ -59,7 +59,7 @@ export default {
       sha: 'about/ourSHA',
     }),
     release () {
-      if (process.env.NODE_ENV === 'development') {
+      if (!PRODUCTION) {
         return {
           link: '',
           name: 'local dev version',

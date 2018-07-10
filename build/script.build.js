@@ -7,11 +7,10 @@ require('colors')
 var
   shell = require('shelljs'),
   path = require('path'),
-  env = require('./env-utils'),
   css = require('./css-utils'),
   config = require('../config'),
   webpack = require('webpack'),
-  webpackConfig = require('./webpack.prod.conf'),
+  webpackConfig = require('../webpack.config'),
   serviceWorkerWebpackConfig = require('./webpack.serviceworker.conf'),
   targetPath = path.join(__dirname, '../dist')
 
@@ -20,14 +19,14 @@ console.log(' Do NOT use VueRouter\'s "history" mode if')
 console.log(' building for Cordova or Electron.\n')
 
 require('./script.clean.js')
-console.log((' Building Quasar App with "' + env.platform.theme + '" theme...\n').bold)
+console.log((' Building Quasar App with "' + config.theme + '" theme...\n').bold)
 
 shell.mkdir('-p', targetPath)
 shell.cp('-R', 'src/statics', targetPath)
 
 function finalize () {
   console.log((
-    '\n Build complete with "' + env.platform.theme.bold + '" theme in ' +
+    '\n Build complete with "' + config.theme.bold + '" theme in ' +
     '"/dist"'.bold + ' folder.\n').cyan)
 
   console.log(' Built files are meant to be served over an HTTP server.'.bold)

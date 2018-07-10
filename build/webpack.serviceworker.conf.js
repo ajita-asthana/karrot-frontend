@@ -1,12 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
-const env = require('./env-utils')
+const config = require('../config')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
+  mode: 'production',
   entry: resolve('src/service-worker.js'),
   devtool: false,
   output: {
@@ -24,8 +25,9 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'FCM_SENDER_ID': '"' + env.fcmSenderId + '"',
+      'FCM_SENDER_ID': JSON.stringify(config.fcmSenderId)
     }),
+    /*
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
       minimize: true,
@@ -33,5 +35,6 @@ module.exports = {
         warnings: false,
       },
     }),
+    */
   ],
 }

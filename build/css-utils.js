@@ -1,73 +1,8 @@
-var
-  ExtractTextPlugin = require('extract-text-webpack-plugin'),
-  autoprefixer = require('autoprefixer'),
+const
   purify = require('purify-css'),
   glob = require('glob'),
   path = require('path'),
   fs = require('fs')
-
-module.exports.postcss = [autoprefixer()]
-
-module.exports.styleLoaders = function (options) {
-  options = options || {}
-
-  function generateLoaders (loaders) {
-    if (options.postcss) {
-      loaders.splice(1, 0, {
-        loader: 'postcss-loader',
-        options: {
-          plugins: module.exports.postcss
-        }
-      })
-    }
-
-    var sourceLoader = loaders
-    .map(function (loader) {
-      if (typeof loader === 'string') {
-        return { loader, options: {} }
-      }
-      return loader
-    })
-    .map(function (loader) {
-      if (options.sourceMap) {
-        loader.options.sourceMap = true
-      }
-      return loader
-    })
-
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: sourceLoader,
-        fallback: 'vue-style-loader'
-      })
-    }
-    else {
-      return ['vue-style-loader', ...sourceLoader]
-    }
-  }
-
-  return {
-    css: generateLoaders(['css-loader']),
-    less: generateLoaders(['css-loader', 'less-loader']),
-    sass: generateLoaders(['css-loader', { loader: 'sass-loader', options: { indentedSyntax: true } } ]),
-    scss: generateLoaders(['css-loader', 'sass-loader']),
-    styl: generateLoaders(['css-loader', 'stylus-loader']),
-    stylus: generateLoaders(['css-loader', 'stylus-loader'])
-  }
-}
-
-module.exports.styleRules = function (options) {
-  var output = []
-  var loaders = exports.styleLoaders(options)
-  for (var extension in loaders) {
-    var loader = loaders[extension]
-    output.push({
-      test: new RegExp('\\.' + extension + '$'),
-      use: loader
-    })
-  }
-  return output
-}
 
 function getSize (size) {
   return (size / 1024).toFixed(2) + 'kb'

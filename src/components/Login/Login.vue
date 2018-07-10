@@ -80,7 +80,7 @@ export default {
   components: { QField, QInput, QBtn },
   mixins: [statusMixin],
   data () {
-    if (process.env.NODE_ENV !== 'production') {
+    if (!PRODUCTION) {
       return {
         email: 'foo@foo.com',
         password: 'foofoo',

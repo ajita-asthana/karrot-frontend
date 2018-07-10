@@ -19,12 +19,13 @@ module.exports = {
     'testcafe',
   ],
   globals: {
-    'DEV': true,
-    'PROD': true,
+    'GIT_SHA1': true,
+    'PRODUCTION': true,
     'CORDOVA': true,
     'BACKEND': true,
     'KARROT_THEME': true,
     'FCM_SENDER_ID': true,
+    'RAVEN_CONFIG': true,
     '__THEME': true
   },
   // add your custom rules here

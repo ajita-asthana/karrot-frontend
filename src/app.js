@@ -20,7 +20,7 @@ if (CORDOVA && BACKEND) {
   require('@/cordova')
 }
 
-if (process.env.NODE_ENV !== 'production') {
+if (!PRODUCTION) {
   log.setLevel('debug')
 }
 

@@ -9,17 +9,16 @@ var
   path = require('path'),
   express = require('express'),
   webpack = require('webpack'),
-  env = require('./env-utils'),
   config = require('../config'),
   opn = require('opn'),
   proxyMiddleware = require('http-proxy-middleware'),
-  webpackConfig = require('./webpack.dev.conf'),
-  serviceWorkerWebpackConfig = require('./webpack.serviceworker.conf'),
+  webpackConfig = require('../webpack.config'),
+  // serviceWorkerWebpackConfig = require('./webpack.serviceworker.conf'),
   app = express(),
   port = process.env.PORT || config.dev.port,
   uri = 'http://localhost:' + port
 
-console.log(' Starting dev server with "' + (process.argv[2] || env.platform.theme).bold + '" theme...')
+console.log(' Starting dev server with "' + (process.argv[2] || config.theme).bold + '" theme...')
 console.log(' Will listen at ' + uri.bold)
 if (config.dev.openBrowser) {
   console.log(' Browser will open when build is ready.\n')
@@ -48,7 +47,7 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-// proxy requests like API. See /config/index.js -> dev.proxyTable
+// proxy requests like API. See /config.js -> dev.proxyTable
 // https://github.com/chimurai/http-proxy-middleware
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
@@ -72,7 +71,7 @@ app.use(hotMiddleware)
 var staticsPath = path.posix.join(webpackConfig.output.publicPath, 'statics/')
 app.use(staticsPath, express.static('./src/statics'))
 
-let builtServiceWorker = false
+let builtServiceWorker = true
 function buildServiceWorker (callback) {
   if (builtServiceWorker) return callback()
   webpack(serviceWorkerWebpackConfig, function (err, stats) {
@@ -88,7 +87,7 @@ app.get('/service-worker.js', [
 ])
 
 // try to serve Cordova statics for Play App
-app.use(express.static(env.platform.cordovaAssets))
+app.use(express.static(config.cordovaAssets))
 
 module.exports = app.listen(port, function (err) {
   if (err) {
@@ -96,7 +95,7 @@ module.exports = app.listen(port, function (err) {
     process.exit(1)
   }
 
-  // open browser if set so in /config/index.js
+  // open browser if set so in /config.js
   if (config.dev.openBrowser) {
     devMiddleware.waitUntilValid(function () {
       opn(uri)
